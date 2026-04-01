@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shahid Communication & GAMCA Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00b386;
+    --green-dark: #008f6b;
+    --green-light: #e6fff8;
+    --gold: #f5a623;
+    --dark: #0d1f1a;
+    --dark2: #152b24;
+    --text: #1a2e28;
+    --muted: #5a7a72;
+    --border: #c8e6de;
+    --white: #ffffff;
+    --bubble-user: #00b386;
+    --bubble-bot: #f0faf7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0d1f1a 0%, #1a3d30 50%, #0d2a20 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  /* Header */
+  .header {
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+    border-radius: 20px 20px 0 0;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid #2a4a3e;
+    border-bottom: none;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(0,179,134,0.4);
+  }
+
+  .header-text h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .header-text p {
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .status-dot {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #a0c4ba;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  /* Chat container */
+  .chat-wrap {
+    width: 100%;
+    max-width: 480px;
+    background: #f5faf8;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #c8e6de;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 420px;
+    max-height: 420px;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Quick replies */
+  .quick-replies {
+    padding: 10px 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+
+  .quick-btn {
+    background: var(--green-light);
+    border: 1.5px solid var(--green);
+    color: var(--green-dark);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+    white-space: nowrap;
+  }
+
+  .quick-btn:hover {
+    background: var(--green);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,179,134,0.3);
+  }
+
+  /* Input area */
+  .input-area {
+    padding: 14px 16px;
+    background: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .input-area input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 25px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    color: var(--text);
+    background: #f8fefe;
+  }
+
+  .input-area input:focus {
+    border-color: var(--green);
+    background: white;
+  }
+
+  .send-btn {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(0,179,134,0.35);
+  }
+
+  .send-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 5px 15px rgba(0,179,134,0.45);
+  }
+
+  .send-btn svg { width: 18px; height: 18px; fill: white; }
+
+  /* Footer */
+  .footer {
+    width: 100%;
+    max-width: 480px;
+    background: var(--dark);
+    border-radius: 0 0 20px 20px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #2a4a3e;
+    border-top: none;
+  }
+
+  .footer-info {
+    font-size: 11px;
+    color: #6a9a8e;
+  }
+
+  .wa-btn {
+    background: #25d366;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .wa-btn:hover { background: #20bc5a; transform: translateY(-1px); }
+
+  /* Message bubbles */
+  .msg {
+    display: flex;
+    gap: 8px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .avatar.bot {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    box-shadow: 0 2px 8px rgba(0,179,134,0.3);
+  }
+
+  .avatar.user-av {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+
+  .bubble {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  .bubble.bot {
+    background: white;
+    border-radius: 4px 16px 16px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid #e0f0ea;
+  }
+
+  .bubble.user {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: white;
+    border-radius: 16px 4px 16px 16px;
+    box-shadow: 0 2px 10px rgba(0,179,134,0.3);
+  }
+
+  .bubble strong { font-weight: 600; }
+  .bubble .price { color: var(--gold); font-weight: 700; }
+  .bubble.user .price { color: #ffe082; }
+
+  /* Typing indicator */
+  .typing {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .typing-dots {
+    background: white;
+    border: 1px solid #e0f0ea;
+    border-radius: 4px 16px 16px 16px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  .typing-dots span {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (max-width: 520px) {
+    body { padding: 0; justify-content: flex-start; }
+    .header, .chat-wrap, .footer { border-radius: 0; max-width: 100%; }
+    .messages { max-height: calc(100vh - 280px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-circle">🖨️</div>
+  <div class="header-text">
+    <h1>Shahid Communication</h1>
+    <p>& GAMCA Solution</p>
+  </div>
+  <div class="status-dot">
+    <div class="dot"></div>
+    <span>Online</span>
+  </div>
+</div>
+
+<!-- Chat -->
+<div class="chat-wrap">
+  <div class="messages" id="messages"></div>
+
+  <!-- Quick replies -->
+  <div class="quick-replies">
+    <button class="quick-btn" onclick="sendQuick('Photocopy/Print prices?')">📄 Photocopy</button>
+    <button class="quick-btn" onclick="sendQuick('GAMCA Medical Appointment?')">🏥 GAMCA</button>
+    <button class="quick-btn" onclick="sendQuick('NADRA ID Card services?')">🪪 NADRA</button>
+    <button class="quick-btn" onclick="sendQuick('Shop timing & location?')">📍 Timing</button>
+    <button class="quick-btn" onclick="sendQuick('CV/Resume banwana hai')">📝 CV/Resume</button>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Apna sawal likhein..." onkeypress="handleKey(event)" />
+    <button class="send-btn" onclick="sendMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-info">⏰ 7:00 AM – 5:00 PM</div>
+  <a class="wa-btn" href="https://wa.me/923440524519" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp
+  </a>
+</div>
+
+<script>
+const SHOP_INFO = `
+You are the helpful assistant for "Shahid Communication & GAMCA Solution" — a document, printing, and Gulf medical appointment services shop in Karachi. 
+
+SHOP INFO:
+- Name: Shahid Communication & GAMCA Solution
+- Hours: 7:00 AM to 5:00 PM (Monday–Saturday)
+- WhatsApp: 03440524519
+- Location: Shahrah-e-Faisal, Karachi
+
+SERVICES & PRICES:
+
+PHYSICAL SERVICES:
+- Photocopy Single Side: Rs. 10
+- Photocopy Double Side: Rs. 20
+- Print Black: Rs. 20
+- Print/Copy Color: Rs. 50
+- ID Duplicate: Rs. 100
+- Stamp Paper: On value (varies)
+- Legal Documentation (Rent/Sell agreements, Half Nama, True Translation): Custom pricing
+- E-Stamping Challan Fee: Rs. 100
+- Passport Photographs (sheet of 8): Rs. 200
+- Urdu/English Typing per page: Rs. 150
+- CV/Resume Normal/Simple: Rs. 100
+- CV/Resume Professional with Picture: Rs. 200
+- Notary Public Legal per page: Rs. 50
+- Notary Public Normal per page: Rs. 10
+- Oath Commissioner per page: Rs. 200
+- Soft Coating A4: Rs. 50
+- Soft Coating Legal: Rs. 70
+- Hard Coating A4: Rs. 100
+- Hard Coating ID: Rs. 50
+- Binding Spiral/Tape: Available (ask for price)
+
+DIGITAL SERVICES (Onsite at shop):
+- GAMCA / Wafid Gulf Medical Appointment: Rs. 4,000
+- NAVTCC Trade Appointment: Rs. 18,000
+- NADRA ID Card Renewal (Normal): Rs. 1,500
+- NADRA ID Card Correction (Normal): Rs. 1,500
+- NADRA ID Card Updating NP (Normal): Rs. 500
+- NADRA ID Card Updating P (Normal): Rs. 2,000
+- NADRA ID Card Cancellation: Rs. 500
+- FRC (Family Registration Certificate): Rs. 2,000
+
+DIGITAL SERVICES (Home Visit by Applicant):
+- NAVTCC Appointment: Rs. 18,000
+- NADRA ID Renewal: Rs. 1,500
+- NADRA ID Correction: Rs. 1,500
+- NADRA ID Updating NP: Rs. 500
+- NADRA ID Updating P: Rs. 2,000
+- NADRA ID Cancellation: Rs. 500
+- FRC: Rs. 2,000
+(Home visit includes fuel + extra charges)
+
+INSTRUCTIONS:
+- Respond helpfully in Roman Urdu or English — match the customer's language
+- Be friendly, warm, and professional
+- If asked about something not in the list, suggest calling/WhatsApp: 03440524519
+- Keep answers concise and clear
+- For GAMCA/Gulf medical: Rs. 4000 is the appointment fee, documents required: passport + old/new CNIC
+- Always mention WhatsApp number for bookings or queries
+- Don't make up prices not listed above
+`;
+
+let chatHistory = [];
+
+function addMessage(text, isUser) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `msg ${isUser ? 'user' : 'bot'}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${isUser ? 'user-av' : 'bot'}`;
+  avatar.textContent = isUser ? '👤' : '🤖';
+
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${isUser ? 'user' : 'bot'}`;
+  bubble.innerHTML = text.replace(/\n/g, '<br>').replace(/Rs\.\s*[\d,]+/g, m => `<span class="price">${m}</span>`);
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.id = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar bot';
+  avatar.textContent = '🤖';
+
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+
+  div.appendChild(avatar);
+  div.appendChild(dots);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+async function callClaude(userMsg) {
+  chatHistory.push({ role: 'user', content: userMsg });
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: SHOP_INFO,
+      messages: chatHistory
+    })
+  });
+
+  const data = await response.json();
+  const reply = data.content?.map(b => b.text || '').join('') || 'Sorry, kuch masla aa gaya. Dobara try karein.';
+  chatHistory.push({ role: 'assistant', content: reply });
+  return reply;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  addMessage(text, true);
+  showTyping();
+
+  try {
+    const reply = await callClaude(text);
+    removeTyping();
+    addMessage(reply, false);
+  } catch (e) {
+    removeTyping();
+    addMessage('Connection error. Please try again or WhatsApp us: 03440524519', false);
+  }
+}
+
+function sendQuick(text) {
+  document.getElementById('userInput').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter') sendMessage();
+}
+
+// Welcome message
+window.onload = () => {
+  setTimeout(() => {
+    addMessage(`Assalam o Alaikum! 👋\n\nMain <strong>Shahid Communication & GAMCA Solution</strong> ka assistant hoon.\n\nMain aapki help kar sakta hoon:\n• 📄 Photocopy / Print prices\n• 🏥 Gulf GAMCA Medical Appointment\n• 🪪 NADRA ID Card services\n• 📝 CV / Resume banana\n• ⏰ Shop timing & info\n\nKya chahiye aapko? 😊`, false);
+  }, 500);
+};
+</script>
+</body>
+</html>
